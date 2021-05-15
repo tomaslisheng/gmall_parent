@@ -12,7 +12,7 @@
         <module name="model" />
         <module name="service_client" />
         <module name="service-util" />
-        <module name="service" />
+        <module name="service-product" />
       </profile>
     </annotationProcessing>
   </component>
@@ -22,6 +22,7 @@
       <module name="common-util" options="-parameters" />
       <module name="model" options="-parameters" />
       <module name="service" options="-parameters" />
+      <module name="service-product" options="-parameters" />
       <module name="service-util" options="-parameters" />
       <module name="service_client" options="-parameters" />
       <module name="web" options="-parameters" />
