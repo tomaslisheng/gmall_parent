@@ -10,6 +10,7 @@
         <module>service_client</module>
         <module>web</module>
         <module>service-product</module>
+        <module>service-item</module>
     </modules>
 
     <parent>

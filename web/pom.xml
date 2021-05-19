@@ -10,6 +10,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>web</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>web-all</module>
+    </modules>
 
-
+<dependencies>
+    <dependency>
+        <groupId>com.atguigu.gmall</groupId>
+        <artifactId>service-util</artifactId>
+        <version>1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.atguigu.gmall</groupId>
+        <artifactId>service-item-client</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
 </project>

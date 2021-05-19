@@ -17,6 +17,11 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.oschina.zcx7878</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>${fastdfs.version}</version>
+        </dependency>
     </dependencies>
 
 
