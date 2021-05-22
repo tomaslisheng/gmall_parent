@@ -25,4 +25,6 @@ public class SpuSaleAttrValue extends BaseEntity {
     private String saleAttrValueName;
     @TableField("sale_attr_name")
     private String saleAttrName;;
+    @TableField(exist = false)
+    private String isChecked;
 }

@@ -16,10 +16,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.atguigu.gmall</groupId>
-            <artifactId>common-util</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <groupId>com.atguigu.gmall</groupId>
+        <artifactId>common-util</artifactId>
+        <version>1.0</version>
+    </dependency>
 
         <!-- redis -->
         <dependency>
@@ -28,18 +28,18 @@
         </dependency>
 
         <!-- spring2.X集成redis所需common-pool2-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.6.0</version>
-        </dependency>-->
+        </dependency>
 
         <!-- redisson -->
-      <!--  <dependency>
+        <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
             <version>3.11.2</version>
-        </dependency>-->
+        </dependency>
 
         <!--mybatis-plus-->
         <dependency>

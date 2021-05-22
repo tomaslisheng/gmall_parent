@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.gmall.mapper.SkuMapper">
+
+
+    <select id="selectSkuBySpuId" resultType="java.util.Map">
+  SELECT
+	skv.sku_id,
+	GROUP_CONCAT(skv.sale_attr_value_id  ORDER BY sav.base_sale_attr_id, skv.sale_attr_value_id SEPARATOR '|') as AttrValueIds
+	FROM
+        sku_sale_attr_value skv,spu_sale_attr_value sav
+    WHERE sav.id = skv.sale_attr_value_id and skv.spu_id = sav.spu_id and
+        skv.spu_id = #{spuId}
+    GROUP BY
+        skv.sku_id
+    ORDER BY sav.base_sale_attr_id,skv.sku_id
+  </select>
+</mapper>
