@@ -44,12 +44,29 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private RedisTemplate redisTemplate;
     @Override
-    public Map<String, Object> getProductDetail(Long skuId) {
+    public Map<String, Object> getProductDetail(Long skuId) throws InterruptedException {
         HashMap<String,Object> map = new HashMap<>();
         System.out.println(redisTemplate);
-        redisTemplate.opsForValue().set("a","我是中国人");
         //查询SKU基础信息
-        SkuInfo skuInfo = skuMapper.selectById(skuId);
+        //使用redis缓存，减轻MySQL数据库压力
+        SkuInfo skuInfo = (SkuInfo) redisTemplate.opsForValue().get("sku:" + skuId + "info");
+        //如果缓存中不存在当前数据，则从MySQL库中查询
+        if(skuInfo == null){
+            //由于考虑并发情况，需要添加reids分布式锁，来实现限流的作用
+            Boolean aBoolean = redisTemplate.opsForValue().setIfAbsent("sku:" + skuId + "lock", "1");
+            //拿到锁，执行查询操作。否则等待
+            if(aBoolean){
+                skuInfo = skuMapper.selectById(skuId);
+                //查询之后缓存至redis中
+                redisTemplate.opsForValue().set("sku:" + skuId + "+info",skuInfo);
+            }
+            else {
+                //如果没有获取锁，则等待3秒，重新查询
+                Thread.sleep(3000);
+                return  getProductDetail(skuId);
+            }
+
+        }
 
         //查询多级菜单信息
         QueryWrapper<CategoryView> wrapper = new QueryWrapper<>();
