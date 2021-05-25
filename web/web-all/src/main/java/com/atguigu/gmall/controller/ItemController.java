@@ -21,9 +21,11 @@ public class ItemController {
     private ProductService productService;
     @RequestMapping("{skuId}.html")
     public String getProductDetail(@PathVariable Long skuId, Model model){
-
+        long start = System.currentTimeMillis();
         Map<String,Object> map = productService.getProductDetail(skuId);
         model.addAllAttributes(map);
+        long end = System.currentTimeMillis();
+        System.out.println("***********************时间为："+(end-start));
         return "item/index";
     }
 }

@@ -11,7 +11,6 @@ import com.atguigu.gmall.product.SkuImage;
 import com.atguigu.gmall.product.SkuInfo;
 import com.atguigu.gmall.product.SpuSale;
 import com.atguigu.gmall.service.CateGoryService;
-import com.atguigu.gmall.service.ProductService;
 import com.atguigu.gmall.service.SkuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +25,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * author lisheng
- * Date:2021/5/19
+ * Date:2021/5/25
  * Description:
  */
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductDetailImpl {
     @Autowired
     private SkuService skuService;
     @Autowired
@@ -43,39 +42,10 @@ public class ProductServiceImpl implements ProductService {
     private SpuSaleMapper spuSaleMapper;
     @Autowired
     private CategoryViewMapper categoryViewMapper;
-
     @Autowired
     private RedisTemplate redisTemplate;
-    @Override
-    public Map<String, Object> getProductDetail(Long skuId) throws InterruptedException {
-        HashMap<String,Object> map = new HashMap<>();
-        System.out.println(redisTemplate);
-
-        //1，查询商品基础信息
-        SkuInfo skuInfo = getProduct(skuId);
-        CategoryView categoryView = getCategoryView(skuInfo.getCategory3Id());
-        //2，查询所有SKU图片列表
-        List<SkuImage> skuImages = getSkuImageList(skuInfo.getId());
-        //3，查询价格信息（由于价格比较敏感。为了强一致性。从MySQL单独查询。）
-        //图片信息写入skuInfo
-        skuInfo.setSkuImageList(skuImages);
-        //5，查询销售属性信息
-        List<SpuSale> sales = getSaleProductId(skuInfo.getSpuId(), skuId);
-        //6，显示所有 sku对应的 销售索性，所有的组合。如何视频。切换产品Id
-        String valuesSkuJson = getSkuBySpuId(skuInfo.getSpuId());
-        skuInfo.setSkuImageList(skuImages);
-        map.put("categoryView",categoryView);
-        map.put("skuInfo",skuInfo);
-        //写入价格信息
-        map.put("price",skuInfo.getPrice());
-        map.put("valuesSkuJson",valuesSkuJson);
-        map.put("spuSaleAttrList",sales);
-        return map;
-    }
-
     @GmallCache
-    @Override
-    public  SkuInfo getProduct(Long skuId) throws InterruptedException {
+    public SkuInfo getProduct(Long skuId) throws InterruptedException {
         //查询SKU基础信息
         //1,使用redis缓存，减轻MySQL数据库压力
         SkuInfo   skuInfo = skuMapper.selectById(skuId);
@@ -84,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     }
     //@GmallCache
     public  SkuInfo getProductback(Long skuId) throws InterruptedException {
-         //查询SKU基础信息
+        //查询SKU基础信息
         //1,使用redis缓存，减轻MySQL数据库压力
         SkuInfo skuInfo = (SkuInfo) redisTemplate.opsForValue().get("sku:" + skuId + "info");
         //如果缓存中不存在当前数据，则从MySQL库中查询
@@ -116,8 +86,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
     @GmallCache
-    @Override
-    public  CategoryView getCategoryView(Long category3Id) {
+    public CategoryView getCategoryView(Long category3Id) {
         //查询多级菜单信息
         QueryWrapper<CategoryView> wrapper = new QueryWrapper<>();
         wrapper.eq("category3Id",category3Id);
@@ -125,8 +94,7 @@ public class ProductServiceImpl implements ProductService {
         return categoryView;
     }
     @GmallCache
-    @Override
-        public  List<SkuImage> getSkuImageList(Long skuId) {
+    public  List<SkuImage> getSkuImageList(Long skuId) {
         //查询所有SKU图片列表
         QueryWrapper<SkuImage> skuWrapper = new  QueryWrapper<>();
         skuWrapper.eq("sku_id",skuId);
@@ -134,14 +102,12 @@ public class ProductServiceImpl implements ProductService {
         return skuImages;
     }
     @GmallCache
-    @Override
-    public  List<SpuSale> getSaleProductId(Long spuId,Long skuId){
+    public  List<SpuSale> getSaleProductId(Long spuId, Long skuId){
         //查询销售属性信息
         List<SpuSale> sales = spuSaleMapper.getSaleProductId(spuId,skuId);
-       return sales;
+        return sales;
     }
     @GmallCache
-    @Override
     public  String getSkuBySpuId(Long spuId){
         //显示所有 sku对应的 销售索性，所有的组合。如何视频。切换产品Id
         List<Map<String,Object>> maps = skuMapper.selectSkuBySpuId(spuId);
