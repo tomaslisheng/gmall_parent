@@ -1,5 +1,7 @@
 package com.atguigu.gmall.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.atguigu.gmall.model.list.Goods;
 import com.atguigu.gmall.product.CategoryView;
 import com.atguigu.gmall.product.SkuImage;
 import com.atguigu.gmall.product.SkuInfo;
@@ -20,4 +22,6 @@ public interface ProductService {
     List<SkuImage> getSkuImageList(Long skuId);
     List<SpuSale> getSaleProductId(Long spuId, Long skuId);
     String getSkuBySpuId(Long spuId);
+    List<JSONObject> getIndexCategory();
+    Goods onSale(Long skuId);
 }

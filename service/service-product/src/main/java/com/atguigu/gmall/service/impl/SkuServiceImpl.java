@@ -1,5 +1,6 @@
 package com.atguigu.gmall.service.impl;
 
+import com.atguigu.gmall.client.SearchFeignClient;
 import com.atguigu.gmall.mapper.SkuImageMapper;
 import com.atguigu.gmall.mapper.SkuMapper;
 import com.atguigu.gmall.mapper.SkuSaleAttrValueMapper;
@@ -27,6 +28,8 @@ public class SkuServiceImpl implements SkuService {
     private SkuSaleMapper skuSaleMapper;
     @Autowired
     private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+    @Autowired
+    private SearchFeignClient searchFeignClient;
     @Override
     public IPage<SkuInfo> listPage(Long page, Long limit) {
         Page<SkuInfo> page1 = new Page<SkuInfo>(page,limit);
@@ -34,6 +37,10 @@ public class SkuServiceImpl implements SkuService {
         return skuInfoIPage;
     }
 
+    /**
+     * 商品上架方法
+     * @param skuId
+     */
     @Override
     public void onSale(Long skuId) {
         QueryWrapper wrapper = new QueryWrapper();
@@ -41,8 +48,15 @@ public class SkuServiceImpl implements SkuService {
         skuInfo.setIsSale("1");
         wrapper.eq("id",skuId);
         skuMapper.update(skuInfo,wrapper);
-    }
 
+        //elasticSearch增加
+        searchFeignClient.onSale(skuId);
+
+}
+    /**
+     * 商品下架方法
+     * @param skuId
+     */
     @Override
     public void cancelSale(Long skuId) {
         QueryWrapper wrapper = new QueryWrapper();
@@ -50,6 +64,9 @@ public class SkuServiceImpl implements SkuService {
         skuInfo.setIsSale("0");
         wrapper.eq("id",skuId);
         skuMapper.update(skuInfo,wrapper);
+
+        //elasticSearch 下架删除
+        searchFeignClient.cancelSale(skuId);
     }
 
     @Override

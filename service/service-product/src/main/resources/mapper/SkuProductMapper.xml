@@ -4,8 +4,53 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.gmall.mapper.SkuMapper">
 
+    <resultMap id="getGoodResultMap" type="com.atguigu.gmall.model.list.Goods" autoMapping="true">
+        <id column="id" property="id"></id>
+        <collection property="attrs" ofType="com.atguigu.gmall.model.list.SearchAttr" autoMapping="true">
+            <id column="attr_id" property="attrId"></id>
+        </collection>
+    </resultMap>
 
-    <select id="selectSkuBySpuId" resultType="java.util.Map">
+    <select id="getGood" resultMap="getGoodResultMap">
+     SELECT
+            si.id,
+            si.sku_name AS title,
+            si.price,
+            si.sku_default_img AS default_img,
+            bt.id AS tm_id,
+            bt.tm_name,
+            bt.logo_url AS tm_logo_url,
+          c1.id as category1_id,
+          c1.`name` as category1_name,
+           c2.id as category2_id,
+          c2.`name` as category2_name,
+           c3.id as category3_id,
+          c3.`name` as category3_name,
+          0 as hot_score,
+          bi.id as attr_id,
+          bi.attr_name,
+          bv.value_name as attr_value
+        FROM
+            sku_info si,
+            sku_attr_value sav,
+            base_attr_info bi,
+            base_attr_value bv,
+            base_trademark bt,
+          base_category1 c1,
+          base_category2 c2,
+          base_category3 c3
+        WHERE
+            si.id = sav.sku_id
+        AND sav.attr_id = bi.id
+        AND bi.id = bv.attr_id
+        AND si.tm_id = bt.id
+        and c3.id = si.category3_id
+        and c1.id = c2.category1_id
+        and c2.id = c3.category2_id
+        and si.id = #{skuId}
+  </select>
+
+ <select id="selectSkuBySpuId" resultType="java.util.Map">
   SELECT
 	skv.sku_id,
 	GROUP_CONCAT(skv.sale_attr_value_id  ORDER BY sav.base_sale_attr_id, skv.sale_attr_value_id SEPARATOR '|') as AttrValueIds

@@ -1,5 +1,6 @@
 package com.atguigu.gmall.mapper;
 
+import com.atguigu.gmall.model.list.Goods;
 import com.atguigu.gmall.product.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,6 @@ import java.util.Map;
 @Mapper
 public interface SkuMapper extends BaseMapper<SkuInfo> {
     List<Map<String, Object>> selectSkuBySpuId(@Param("spuId") Long spuId);
+
+    Goods getGood(@Param("skuId") Long skuId);
 }

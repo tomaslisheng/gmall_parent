@@ -22,6 +22,11 @@
             <artifactId>fastdfs-client-java</artifactId>
             <version>${fastdfs.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atguigu.gmall</groupId>
+            <artifactId>service-search-client</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 

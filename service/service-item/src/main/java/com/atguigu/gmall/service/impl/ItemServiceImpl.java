@@ -78,12 +78,8 @@ public class ItemServiceImpl implements ItemService {
                 map.put("valuesSkuJson",valuesSkuJson);
             }
         },threadPoolExecutor);
+        //allOf等待所有异步线程任务结束
         CompletableFuture.allOf(skuInfoFuture,categoryFuture,imgFuture,saleFuture,valuesSkuJsonFuture).join();
-        //CategoryView categoryView = productFeignClient.getCategoryView(skuId);
-        //List<SkuImage> skuImageList = productFeignClient.getSkuImageList(skuId);
-        //List<SpuSale> saleProductId = productFeignClient.getSaleProductId(skuInfo.getSpuId(),skuId);
-        // String valuesSkuJson = productFeignClient.getSkuBySpuId(skuId);
-        //skuInfo.setSkuImageList(skuImageList);
         //写入价格信息
         return map;
     }

@@ -1,5 +1,7 @@
 package com.atguigu.gmall.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.atguigu.gmall.model.list.Goods;
 import com.atguigu.gmall.product.CategoryView;
 import com.atguigu.gmall.product.SkuImage;
 import com.atguigu.gmall.product.SkuInfo;
@@ -27,6 +29,19 @@ public class ProductApiController {
 
     @Autowired
     private ProductService productService;
+
+    @RequestMapping("onSale/{skuId}")
+    public Goods onSale(@PathVariable Long skuId){
+        Goods goods = productService.onSale(skuId);
+        return goods;
+    }
+
+    @RequestMapping("getIndexCategory")
+    public  List<JSONObject> getIndexCategory(){
+        List<JSONObject> jsonObjects =  productService.getIndexCategory();
+        return jsonObjects;
+    }
+
     @RequestMapping("getProductDetail/{skuId}")
     public Map<String,Object> getProductDetail (@PathVariable Long skuId) throws InterruptedException {
         Map<String,Object> map = productService.getProductDetail(skuId);

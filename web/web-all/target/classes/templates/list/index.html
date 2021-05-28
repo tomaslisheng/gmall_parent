@@ -52,29 +52,29 @@
                     <a href="#">全部结果</a>
                 </li>
                 <li  class="active">
-                    <span th:text="${searchParam.keyword}"></span>
+                    <span th:text="${searchParam?.keyword}"></span>
                 </li>
             </ul>
             <ul class="fl sui-tag">
-                <li th:if="${searchParam.trademark != null}" class="with-x">
+                <li th:if="${searchParam?.trademark != null}" class="with-x">
                     <span th:text="${trademarkParam}"></span>
-                    <a th:href="@{${#strings.replace(urlParam+'&order='+searchParam.order,'trademark='+searchParam.trademark,'')}}">×</a>
+                    <a th:href="@{${#strings.replace(urlParam+'&order='+searchParam?.order,'trademark='+searchParam?.trademark,'')}}">×</a>
                 </li>
-                <li th:if="${searchParam.props != null}" th:each="prop : ${propsParamList}" class="with-x">
+                <li th:if="${searchParam?.props != null}" th:each="prop : ${propsParamList}" class="with-x">
                     <span th:text="${prop.attrName}+'：'+${prop.attrValue}"></span>
-                    <a th:href="@{${#strings.replace(urlParam+'&order='+searchParam.order,'props='+prop.attrId+':'+prop.attrValue+':'+prop.attrName,'')}}">×</a>
+                    <a th:href="@{${#strings.replace(urlParam+'&order='+searchParam?.order,'props='+prop.attrId+':'+prop.attrValue+':'+prop.attrName,'')}}">×</a>
                 </li>
             </ul>
         </div>
 
         <!--selector-->
         <div class="clearfix selector">
-            <div class="type-wrap logo" th:if="${searchParam.trademark == null}">
+            <div class="type-wrap logo" th:if="${searchParam?.trademark == null}">
                 <div class="fl key brand">品牌</div>
                 <div class="value logos">
                     <ul class="logo-list">
                         <li th:each="trademark:${trademarkList}">
-                            <a th:href="${urlParam}+'&trademark='+${trademark.tmId}+':'+${trademark.tmName}+'&order='+${searchParam.order}" th:text="${trademark.tmName}">属性值111</a>
+                            <a th:href="${urlParam}+'&trademark='+${trademark.tmId}+':'+${trademark.tmName}+'&order='+${searchParam?.order}" th:text="${trademark.tmName}">属性值111</a>
                         </li>
                     </ul>
                 </div>
@@ -90,7 +90,7 @@
                 <div class="fl value">
                     <ul class="type-list">
                         <li th:each="attrValue:${baseAttrInfo.attrValueList}">
-                            <a th:href="${urlParam}+'&props='+${baseAttrInfo.attrId}+':'+${attrValue}+':'+${baseAttrInfo.attrName}+'&order='+${searchParam.order}" th:text="${attrValue}" >属性值111</a>
+                            <a th:href="${urlParam}+'&props='+${baseAttrInfo.attrId}+':'+${attrValue}+':'+${baseAttrInfo.attrName}+'&order='+${searchParam?.order}" th:text="${attrValue}" >属性值111</a>
                         </li>
                     </ul>
                 </div>
@@ -104,14 +104,14 @@
             <div class="sui-navbar">
                 <div class="navbar-inner filter">
                     <ul class="sui-nav">
-                        <li th:class="${orderMap.type == '1' ? 'active': ''}">
-                            <a th:href="${urlParam}+'&order=1:'+${orderMap.sort == 'asc' ? 'desc' : 'asc'}">
-                                综合<span th:if="${orderMap.type == '1'}" th:text="${orderMap.sort == 'asc' ? '↑' : '↓'}"></span>
+                        <li th:class="${orderMap?.type == '1' ? 'active': ''}">
+                            <a th:href="${urlParam}+'&order=1:'+${orderMap?.sort == 'asc' ? 'desc' : 'asc'}">
+                                综合<span th:if="${orderMap?.type == '1'}" th:text="${orderMap?.sort == 'asc' ? '↑' : '↓'}"></span>
                             </a>
                         </li>
-                        <li th:class="${orderMap.type == '2' ? 'active': ''}">
-                            <a th:href="${urlParam}+'&order=2:'+${orderMap.sort == 'asc' ? 'desc' : 'asc'}">
-                                价格<span th:if="${orderMap.type == '2'}" th:text="${orderMap.sort == 'asc' ? '↑' : '↓'}"></span>
+                        <li th:class="${orderMap?.type == '2' ? 'active': ''}">
+                            <a th:href="${urlParam}+'&order=2:'+${orderMap?.sort == 'asc' ? 'desc' : 'asc'}">
+                                价格<span th:if="${orderMap?.type == '2'}" th:text="${orderMap?.sort == 'asc' ? '↑' : '↓'}"></span>
                             </a>
                         </li>
                         <li>
@@ -153,22 +153,22 @@
 
                 </ul>
             </div>
-            <div class="fr page">
+            <!--<div class="fr page">
                 <div class="sui-pagination pagination-large">
                     <ul>
                         <li class="prev" th:if="${pageNo != 1}">
-                            <a th:href="${urlParam}+'&pageNo='+${pageNo - 1}+'&order='+${searchParam.order}">上一页</a>
+                            <a th:href="${urlParam}+'&pageNo='+${pageNo - 1}+'&order='+${searchParam?.order}">上一页</a>
                         </li>
                         <li class="prev disabled" th:if="${pageNo == 1}">
                             <a href="javascript:">上一页</a>
                         </li>
 
                         <li th:each="i : ${#numbers.sequence(1,totalPages)}" th:class="${i == pageNo } ? 'active' : ''">
-                            <a th:href="${urlParam}+'&pageNo='+${i}+'&order='+${searchParam.order}"><span th:text="${i}"></span></a>
+                            <a th:href="${urlParam}+'&pageNo='+${i}+'&order='+${searchParam?.order}"><span th:text="${i}"></span></a>
                         </li>
 
                         <li class="next" th:if="${pageNo < totalPages}">
-                            <a th:href="${urlParam}+'&pageNo='+${pageNo + 1}+'&order='+${searchParam.order}">下一页</a>
+                            <a th:href="${urlParam}+'&pageNo='+${pageNo + 1}+'&order='+${searchParam?.order}">下一页</a>
                         </li>
                         <li class="next disabled" th:if="${pageNo == totalPages}">
                             <a href="javascript:">下一页</a>
@@ -176,7 +176,7 @@
                     </ul>
                     <div><span>共<span th:text="${totalPages }"></span>页&nbsp;</span><span></div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <!--hotsale-->
         <div class="clearfix hot-sale">
