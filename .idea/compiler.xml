@@ -9,11 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="web-all" />
         <module name="common-util" />
-        <module name="service-item-client" />
+        <module name="service-search-client" />
+        <module name="service-search" />
         <module name="model" />
         <module name="service-util" />
         <module name="service-product" />
-        <module name="service-item" />
         <module name="service-product-client" />
       </profile>
     </annotationProcessing>
@@ -28,6 +28,8 @@
       <module name="service-item-client" options="-parameters" />
       <module name="service-product" options="-parameters" />
       <module name="service-product-client" options="-parameters" />
+      <module name="service-search" options="-parameters" />
+      <module name="service-search-client" options="-parameters" />
       <module name="service-util" options="-parameters" />
       <module name="service_client" options="-parameters" />
       <module name="web" options="-parameters" />

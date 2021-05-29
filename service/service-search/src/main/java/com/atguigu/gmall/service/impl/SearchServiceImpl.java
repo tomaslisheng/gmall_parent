@@ -21,6 +21,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -137,10 +138,16 @@ public class SearchServiceImpl implements SerachService {
         searchSourceBuilder.aggregation(tmIdAggBuild.
                 subAggregation(AggregationBuilders.terms("tmNameAgg").field("tmName")).
                 subAggregation(AggregationBuilders.terms("tmLogoAgg").field("tmLogoUrl")));
+
+        //属性聚合
+        NestedAggregationBuilder attrsNested = AggregationBuilders.nested("attrsAgg", "attrs");
+        searchSourceBuilder.aggregation(attrsNested.subAggregation(AggregationBuilders.terms("attrsIdAgg").field("attrs.attrId")).subAggregation(AggregationBuilders.terms("attrsNameAgg").field("attrs.attrName")).subAggregation(AggregationBuilders.terms("attrsValueAgg").field("attrs.attrValue")));
+
         searchSourceBuilder.query(boolQueryBuilder);
         searchSourceBuilder.from(0);
         searchSourceBuilder.size(60);
         searchRequest.source(searchSourceBuilder);
+        System.out.println("*****************searchSourceBuilder:"+searchSourceBuilder.toString());
         return searchRequest;
     }
 
@@ -154,6 +161,7 @@ public class SearchServiceImpl implements SerachService {
         SearchResponseVo searchResponseVo = new SearchResponseVo();
         List<Goods> goodsList = new ArrayList<>();
         List<SearchResponseTmVo> searchResponseTmVos = new ArrayList<>();
+        //1，解析列表数据
         if(searchResponse!=null&&totalHits>0){
             for (SearchHit hit : searchResponse.getHits().getHits()) {
                 String sourceAsString = hit.getSourceAsString();
@@ -161,6 +169,7 @@ public class SearchServiceImpl implements SerachService {
                 goodsList.add(goods);
             }
         }
+        //2，解析品牌列表
         //searchResponse.getAggregations().asMap().get("")
         ParsedLongTerms tmIdLongTerms =(ParsedLongTerms)searchResponse.getAggregations().asMap().get("tmIdAgg");
         List<? extends Terms.Bucket> buckets = tmIdLongTerms.getBuckets();
@@ -184,6 +193,8 @@ public class SearchServiceImpl implements SerachService {
             searchResponseTmVo.setTmId(tmId);
             searchResponseTmVos.add(searchResponseTmVo);
         }
+        //3，解析 属性，属性值
+
         searchResponseVo.setGoodsList(goodsList);
         searchResponseVo.setTrademarkList(searchResponseTmVos);
         return searchResponseVo;

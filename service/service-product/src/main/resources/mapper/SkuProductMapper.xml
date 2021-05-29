@@ -42,6 +42,7 @@
         WHERE
             si.id = sav.sku_id
         AND sav.attr_id = bi.id
+        AND sav.value_id = bv.id
         AND bi.id = bv.attr_id
         AND si.tm_id = bt.id
         and c3.id = si.category3_id
