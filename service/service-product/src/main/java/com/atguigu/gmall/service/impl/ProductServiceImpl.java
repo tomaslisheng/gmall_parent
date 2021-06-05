@@ -121,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
     public  CategoryView getCategoryView(Long category3Id) {
         //查询多级菜单信息
         QueryWrapper<CategoryView> wrapper = new QueryWrapper<>();
-        wrapper.eq("category3Id",category3Id);
+        wrapper.eq("category3_id",category3Id);
         CategoryView categoryView = categoryViewMapper.selectOne(wrapper);
         return categoryView;
     }

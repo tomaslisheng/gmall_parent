@@ -73,4 +73,7 @@ public class Goods {
     @Field(type = FieldType.Nested)
     private List<SearchAttr> attrs;
 
+    // 热度排名
+    @Field(type = FieldType.Long)
+    private Long hotScore = 0L;
 }

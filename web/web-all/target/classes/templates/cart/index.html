@@ -398,12 +398,12 @@
             },
 
             add(item) {
-                this.addToCart(item.skuId, 1)
+                this.addToCart(item.skuId, item.skuNum+1)
             },
 
             down(item) {
                 if(item.skuNum > 1) {
-                    this.addToCart(item.skuId, -1)
+                    this.addToCart(item.skuId, item.skuNum-1)
                 }
             },
 

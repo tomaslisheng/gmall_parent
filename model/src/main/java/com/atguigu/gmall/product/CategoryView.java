@@ -10,18 +10,18 @@ import lombok.Data;
  * Description:
  */
 @Data
-@TableName("category_view")
+@TableName("base_category_view")
 public class CategoryView {
-    @TableField("category1Id")
+    @TableField("category1_id")
     private String category1Id;
-    @TableField("category1Name")
+    @TableField("category1_name")
     private String category1Name;
-    @TableField("category2Id")
+    @TableField("category2_id")
     private String category2Id;
-    @TableField("category2Name")
+    @TableField("category2_name")
     private String category2Name;
-    @TableField("category3Id")
+    @TableField("category3_id")
     private String category3Id;
-    @TableField("category3Name")
+    @TableField("category3_name")
     private String category3Name;
 }

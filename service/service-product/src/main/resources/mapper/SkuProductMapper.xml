@@ -61,6 +61,6 @@
         skv.spu_id = #{spuId}
     GROUP BY
         skv.sku_id
-    ORDER BY sav.base_sale_attr_id,skv.sku_id
+    ORDER BY skv.sku_id
   </select>
 </mapper>

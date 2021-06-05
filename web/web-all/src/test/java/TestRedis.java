@@ -20,8 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "spring.redis")
-
 @SpringBootTest(classes = ServiceWebAllApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class TestRedis {
