@@ -13,6 +13,9 @@
         <module>service-cart-client</module>
         <module>service_client/service-cart-client</module>
         <module>server-gateway</module>
+        <module>service-pay</module>
+        <module>rabbit-util</module>
+        <module>rabbit-util</module>
     </modules>
 
     <parent>

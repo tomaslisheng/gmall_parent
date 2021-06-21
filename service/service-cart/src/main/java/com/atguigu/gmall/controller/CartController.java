@@ -27,6 +27,21 @@ public class CartController {
         SkuInfo skuInfo = cartService.addCart(skuId,skuNum,userId,userTempId);
         return skuInfo;
     }
+
+    /**
+     * 购物车选中 结算订单 查询当前用户所有选中商品信息
+     * @param
+     * @param
+     * @param
+     * @return
+     */
+
+    @RequestMapping("getCartChecked/{userId}")
+    public List<CartInfo> getCartChecked(@PathVariable String userId){
+        List<CartInfo> cartInfos = cartService.getCartChecked(userId);
+        return cartInfos;
+    }
+
     @RequestMapping("/addToCart/{skuId}/{skuNum}")
     public Result addToCart(HttpServletRequest request,@PathVariable Long skuId,@PathVariable Long skuNum){
         String userId = request.getHeader("userId");
@@ -44,14 +59,18 @@ public class CartController {
     }
 
     @RequestMapping("/checkCart/{skuId}/{isChecked}")
-    public Result checkCart(@PathVariable Long skuId,@PathVariable Long isChecked){
-        cartService.checkCart(skuId,isChecked);
+    public Result checkCart(HttpServletRequest request,@PathVariable Long skuId,@PathVariable Long isChecked){
+        String userId = request.getHeader("userId");
+        String userTempId = request.getHeader("userTempId");
+        cartService.checkCart(skuId,isChecked,userId,userTempId);
         return Result.ok();
     }
 
     @RequestMapping("/deleteCart/{skuId}")
-    public Result deleteCart(@PathVariable Long skuId){
-        cartService.deleteCart(skuId);
+    public Result deleteCart(HttpServletRequest request,@PathVariable Long skuId){
+        String userId = request.getHeader("userId");
+        String userTempId = request.getHeader("userTempId");
+        cartService.deleteCart(skuId,userId,userTempId);
         return Result.ok();
     }
 

@@ -12,7 +12,8 @@
     <artifactId>common-util</artifactId>
     <version>1.0</version>
 
-    <packaging>jar</packaging>
+
+    <packaging>pom</packaging>
     <name>common-util</name>
     <description>common-util</description>
 

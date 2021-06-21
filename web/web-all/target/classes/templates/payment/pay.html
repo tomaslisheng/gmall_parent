@@ -28,8 +28,8 @@
 		<div class="checkout-tit">
 			<h4 class="tit-txt"><span class="success-icon"></span><span  class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span></h4>
 			<div class="paymark">
-				<span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em th:text="${orderInfo.id}">00</em></span>
-				<span class="fr"><em class="sui-lead">应付金额：</em><em  class="orange money" th:text="'￥'+${orderInfo.totalAmount}">￥1</em></span>
+				<span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em th:text="${orderInfo?.id}">00</em></span>
+				<span class="fr"><em class="sui-lead">应付金额：</em><em  class="orange money" th:text="'￥'+${orderInfo?.totalAmount}">￥1</em></span>
 			</div>
 		</div>
 
@@ -56,8 +56,8 @@
 			</div>
 			<div class="step-cont">
 				<ul class="payType">
-					<a th:href="@{http://api.gmall.com/api/payment/alipay/submit/{orderId}(orderId=${orderInfo.id})}" target="_blank"><li><img src="./img/_/pay1.jpg"></li></a>
-					<a th:href="@{http://payment.gmall.com/weixin.html?orderId={orderId}(orderId=${orderInfo.id})}" target="_blank"><li><img src="./img/_/pay3.jpg"></li></a>
+					<a th:href="@{http://api.gmall.com/api/payment/alipay/submit/{orderId}(orderId=${orderInfo?.id})}" target="_blank"><li><img src="./img/_/pay1.jpg"></li></a>
+					<a th:href="@{http://payment.gmall.com/weixin.html?orderId={orderId}(orderId=${orderInfo?.id})}" target="_blank"><li><img src="./img/_/pay3.jpg"></li></a>
 				</ul>
 
 			</div>

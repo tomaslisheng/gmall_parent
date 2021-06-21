@@ -333,6 +333,7 @@
                 trade.submitOrder(this.order, this.tradeNo).then(response => {
                     debugger
                     if (response.data.code == 200) {
+						console.log(response.data.data)
                         window.location.href = 'http://payment.gmall.com/pay.html?orderId=' + response.data.data
                     } else {
                         alert(response.data.message)

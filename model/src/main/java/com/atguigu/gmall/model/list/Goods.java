@@ -14,7 +14,7 @@ import java.util.List;
  * Date:2021/5/26
  * Description:
  */
-@Document(indexName = "goods",type = "info",shards = 3,replicas = 1)
+@Document(indexName = "goods",type = "info",shards = 3,replicas = 1,createIndex = false)
 @Data
 public class Goods {
     //elasticSearch数据结构信息

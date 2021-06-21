@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * author lisheng
@@ -74,30 +76,67 @@ public class CartServiceImpl implements CartService {
         if(StringUtils.isEmpty(userId)){
             cartInfos = redisTemplate.opsForHash().values("user:cart:"+userTempId);
         }
-        if(StringUtils.isEmpty(userTempId)){
+        else{
             cartInfos = redisTemplate.opsForHash().values("user:cart:"+userId);
         }
         return cartInfos;
     }
 
+
     @Override
-    public void checkCart(Long skuId, Long isChecked) {
+    public List<CartInfo> getCartChecked(String userId) {
+        List<CartInfo> cartInfos = new ArrayList<>();
+        List<CartInfo> cartInfosRedis = new ArrayList<>();
+        cartInfosRedis = redisTemplate.opsForHash().values("user:cart:"+userId);
+
+        //筛选出选中的商品
+        Map<Integer, List<CartInfo>> collect = cartInfosRedis.stream().collect(Collectors.groupingBy(CartInfo::getIsChecked));
+        for (Map.Entry<Integer, List<CartInfo>> map : collect.entrySet()) {
+            if(1==map.getKey()){
+                cartInfos = map.getValue();
+            }
+        }
+        System.out.println(collect);
+
+        return cartInfos;
+    }
+
+    @Override
+    public void checkCart(Long skuId, Long isChecked,String userId,String userTempId) {
+        CartInfo cartInfoRedis =null;
         //更新redis
-        CartInfo cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:1", "skuId:" + skuId);
-        cartInfoRedis.setIsChecked(isChecked.intValue());
-        redisTemplate.opsForHash().put("user:cart:1", "skuId:" + skuId,cartInfoRedis);
+        if(StringUtils.isEmpty(userId)){
+             cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:"+userTempId, "skuId:" + skuId);
+            cartInfoRedis.setIsChecked(isChecked.intValue());
+            redisTemplate.opsForHash().put("user:cart:"+userTempId, "skuId:" + skuId,cartInfoRedis);
+        }
+        else{
+             cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:"+userId, "skuId:" + skuId);
+            cartInfoRedis.setIsChecked(isChecked.intValue());
+            redisTemplate.opsForHash().put("user:cart:"+userId, "skuId:" + skuId,cartInfoRedis);
+        }
+
 
         //更新mysql
         cartMapper.updateById(cartInfoRedis);
     }
 
     @Override
-    public void deleteCart(Long skuId) {
+    public void deleteCart(Long skuId,String userId,String userTempId) {
+        CartInfo cartInfoRedis =null;
         //redis 获取cartInfo信息
-        CartInfo cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:1", "skuId:" + skuId);
+        if(StringUtils.isEmpty(userId)){
+            cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:"+userTempId, "skuId:" + skuId);
+            //移除
+            redisTemplate.opsForHash().delete("user:cart:"+userTempId, "skuId:" + skuId);
+        }
+        else{
+            cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:"+userId, "skuId:" + skuId);
+            //移除
+            redisTemplate.opsForHash().delete("user:cart:"+userId, "skuId:" + skuId);
+        }
 
-        //移除
-        redisTemplate.opsForHash().delete("user:cart:1", "skuId:" + skuId);
+
 
         //mysql删除
         cartMapper.deleteById(cartInfoRedis.getId());
@@ -112,7 +151,7 @@ public class CartServiceImpl implements CartService {
             cartInfoRedis.setSkuNum(skuNum.intValue());
             redisTemplate.opsForHash().put("user:cart:"+userTempId, "skuId:" + skuId,cartInfoRedis);
         }
-        if(StringUtils.isEmpty(userTempId)){
+        else{
              cartInfoRedis = (CartInfo)redisTemplate.opsForHash().get("user:cart:"+userId, "skuId:" + skuId);
             cartInfoRedis.setSkuNum(skuNum.intValue());
             redisTemplate.opsForHash().put("user:cart:"+userId, "skuId:" + skuId,cartInfoRedis);

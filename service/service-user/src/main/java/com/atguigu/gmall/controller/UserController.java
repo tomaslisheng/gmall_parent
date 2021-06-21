@@ -1,6 +1,7 @@
 package com.atguigu.gmall.controller;
 
 import com.atguigu.gmall.service.UserService;
+import com.atguigu.gmall.user.UserAddress;
 import com.atguigu.gmall.user.UserInfo;
 import com.atguigu.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * author lisheng
@@ -26,6 +28,14 @@ public class UserController {
         HashMap<String,Object> verifyMap = userService.verify(cookieOrHeaderValue);
         return verifyMap;
     }
+
+
+    @RequestMapping("getUserAddress/{userId}")
+    public List<UserAddress> getUserAddress(@PathVariable String userId){
+        List<UserAddress> address = userService.getUserAddress(userId);
+        return address;
+    }
+
 
     @RequestMapping("/passport/login")
     public Result login(@RequestBody UserInfo userInfo){

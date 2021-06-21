@@ -38,7 +38,7 @@ public class SearchController {
         return "index/index";
     }
 
-    @RequestMapping("search.html")
+    @RequestMapping({"search.html","list.html"})
     public String search(Model model, SearchParam searchParam){
         SearchResponseVo searchResponseVo= searchService.search(searchParam);
         model.addAttribute("goodsList",searchResponseVo.getGoodsList());

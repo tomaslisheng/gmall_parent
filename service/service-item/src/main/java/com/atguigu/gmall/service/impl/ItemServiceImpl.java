@@ -29,6 +29,12 @@ public class ItemServiceImpl implements ItemService {
     ProductFeignClient productFeignClient;
     @Autowired
     ThreadPoolExecutor threadPoolExecutor;
+
+    /**
+     * 异步编排查询商品详情信息
+     * @param skuId
+     * @return
+     */
     @Override
     public Map<String, Object> getProductDetail(Long skuId) {
         HashMap<String, Object> map = new HashMap<>();
